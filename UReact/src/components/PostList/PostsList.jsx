@@ -4,31 +4,42 @@ import Post from './Post'
 
 export default class PostsList extends PureComponent {
 
-    static defaultProps = {
-        posts: []
+    constructor(props) {
+        super(props)
+        this.state = {
+            posts: []
+        }
+    }
+
+
+    detailsHandler = (post) => (event) => {
+        this.setState({ loading: true })
+        fetch(post.url)
+            .then((response) => response.json())
+            .then((posts) => {
+                const newPosts = posts.map((post) => {
+                    if (post.name === response.name) {
+                        post.forms = response.forms;
+                    }
+                    return post
+                })
+                this.setState({ posts: newPosts, loading: false })
+            })
+            .catch(() => {
+                this.setState({ posts: [], loading: false })
+            })
     }
 
     render() {
-        const { posts, post } = this.props
+        const { post } = this.props
+        const posts = this.state
 
         return (
             <ul>
                 {posts.map((post) => <li><Post
-                    //запрашиваю информацию о покемоне при нажатии на кнопку
-                    details={this.detailsHandler = () => {
-                        this.setState({ loading: true })
-                        fetch(post.url)
-                            .then((response) => response.json())
-                            .then((posts) => {
-                                this.setState({ posts: posts.forms, loading: false })
-                                //смог вывести информацию только через консоль
-                                console.log("name: " + posts.name + ' weight: ' + posts.weight)
-                            })
-                            .catch(() => {
-                                this.setState({ posts: [], loading: false })
-                            })
-                    }}
+                    details={this.detailsHandler(post)}
                     post={post}
+
                 />
                 </li>)}
             </ul>
