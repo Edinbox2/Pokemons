@@ -8,12 +8,17 @@ export default class Post extends PureComponent {
     }
     
     render() {
-        const { post, details } = this.props
+        const { post, details, postclick } = this.props
+        
         return (
             <div>
                 <h3>{post.name}</h3>
                 <a href={post.url} >ссылка на {post.name}</a><br/>
-                <button onClick={details}>Информация о покемоне</button>
+                <button onClick={details} postclick={postclick}>Информация о покемоне</button>
+
+                <div>
+                    {postclick.name}
+                </div>
             </div>
         )
     }

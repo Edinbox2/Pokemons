@@ -12,34 +12,14 @@ export default class PostsList extends PureComponent {
     }
 
 
-    detailsHandler = (post) => (event) => {
-        this.setState({ loading: true })
-        fetch(post.url)
-            .then((response) => response.json())
-            .then((posts) => {
-                const newPosts = posts.map((post) => {
-                    if (post.name === response.name) {
-                        post.forms = response.forms;
-                    }
-                    return post
-                })
-                this.setState({ posts: newPosts, loading: false })
-            })
-            .catch(() => {
-                this.setState({ posts: [], loading: false })
-            })
-    }
-
     render() {
-        const { post } = this.props
-        const posts = this.state
-
+        const { post, posts, detailsPost, postclick } = this.props
         return (
             <ul>
                 {posts.map((post) => <li><Post
-                    details={this.detailsHandler(post)}
+                    details={detailsPost}
                     post={post}
-
+                    postclick={postclick}
                 />
                 </li>)}
             </ul>
